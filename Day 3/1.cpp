@@ -26,7 +26,8 @@ void getInput(std::vector<char> &sharedItems) {
             secondHalf.insert(c);
         }
 
-        std::set_intersection(firstHalf.begin(), firstHalf.end(), secondHalf.begin(), secondHalf.end(), std::back_inserter(sharedItems));
+        std::set_intersection(firstHalf.begin(), firstHalf.end(), secondHalf.begin(), secondHalf.end(),
+                              std::back_inserter(sharedItems));
         firstHalf.clear();
         secondHalf.clear();
     }
@@ -36,10 +37,27 @@ void printInput(const std::vector<char> &sharedItems) {
     for (const char ch: sharedItems) {
         std::cout << ch;
     }
+    std::cout << std::endl;
+}
+
+int countPoints(const std::vector<char> &sharedItems) {
+
+    int sum = 0;
+
+    for (const char c: sharedItems) {
+        if (std::islower(c)) {
+            sum += c - 96;
+        } else {
+            sum += c - 38;
+        }
+    }
+    return sum;
 }
 
 int main() {
     std::vector<char> sharedItems;
     getInput(sharedItems);
     printInput(sharedItems);
+
+    std::cout << countPoints(sharedItems);
 }
