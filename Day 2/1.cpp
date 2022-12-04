@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 
-void getInput(std::vector<char>&opponentMoves, std::vector<char>&myMoves){
+void getInput(std::vector<char> &opponentMoves, std::vector<char> &myMoves) {
     std::ifstream is(R"(F:\CLionProjects\AoC2022\Day 2\data.txt)");
 
     char opponentMove, myMove;
@@ -17,10 +17,10 @@ void getInput(std::vector<char>&opponentMoves, std::vector<char>&myMoves){
 
 int pointsForDuel(const char opponent, const char me) {
     std::vector<std::pair<char, char>> losingCombinations = {std::make_pair('A', 'Z'), std::make_pair('B', 'X'),
-                                                              std::make_pair('C', 'Y')};
+                                                             std::make_pair('C', 'Y')};
 
     std::vector<std::pair<char, char>> winningCombinations = {std::make_pair('A', 'Y'), std::make_pair('B', 'Z'),
-                                                             std::make_pair('C', 'X')};
+                                                              std::make_pair('C', 'X')};
 
     for (const auto &combination: winningCombinations) {
         if (opponent == combination.first && me == combination.second) {
@@ -36,7 +36,7 @@ int pointsForDuel(const char opponent, const char me) {
     return 3;
 }
 
-int shapeSum(const char c){
+int shapeSum(const char c) {
     if (c == 'X') {
         return 1;
     }
@@ -58,7 +58,7 @@ int main() {
 
     int totalSum = 0;
 
-    for(int i = 0; i < myMoves.size(); i++){
+    for (int i = 0; i < myMoves.size(); i++) {
         totalSum += pointsForDuel(opponentMoves[i], myMoves[i]);
         totalSum += shapeSum(myMoves[i]);
     }

@@ -3,58 +3,47 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <numeric>
 
+struct DuelPair {
+    char opponent;
+    char me;
+};
 
-void getInput(std::vector<char>&opponentMoves, std::vector<char>&myMoves){
+void getInput(std::vector<char> &opponentMoves, std::vector<char> &order) {
     std::ifstream is(R"(F:\CLionProjects\AoC2022\Day 2\data.txt)");
 
-    char opponentMove, myMove;
+    char opponentMove, ord;
 
-    while (is >> opponentMove && is >> myMove) {
+    while (is >> opponentMove && is >> ord) {
         opponentMoves.push_back(opponentMove);
-        myMoves.push_back(myMove);
+        order.push_back(ord);
     }
 }
 
-//int opponentShapeSum(const std::vector<char> &opponentMoves) {
-//    return std::accumulate(opponentMoves.begin(), opponentMoves.end(), 0, [](int res, const char c) {
-//        if (c == 'A') {
-//            res += 1;
-//        }
-//        if (c == 'B') {
-//            res += 2;
-//        }
-//        if (c == 'C') {
-//            res += 3;
-//        }
-//        return res;
-//    });
-//}
-
 int pointsForDuel(const char opponent, const char me) {
-    std::vector<std::pair<char, char>> losingCombinations = {std::make_pair('A', 'Z'), std::make_pair('B', 'X'),
-                                                             std::make_pair('C', 'Y')};
+    std::vector<DuelPair> losingCombinations = {{'A', 'Z'},
+                                                {'B', 'X'},
+                                                {'C', 'Y'}};
 
-    std::vector<std::pair<char, char>> winningCombinations = {std::make_pair('A', 'Y'), std::make_pair('B', 'Z'),
-                                                              std::make_pair('C', 'X')};
-
+    std::vector<DuelPair> winningCombinations = {{'A', 'Y'},
+                                                 {'B', 'Z'},
+                                                 {'C', 'X'}};
 
     for (const auto &combination: winningCombinations) {
-        if (opponent == combination.first && me == combination.second) {
+        if (opponent == combination.opponent && me == combination.me) {
             return 6;
         }
     }
 
     for (const auto &combination: losingCombinations) {
-        if (opponent == combination.first && me == combination.second) {
+        if (opponent == combination.opponent && me == combination.me) {
             return 0;
         }
     }
     return 3;
 }
 
-int shapeSum(const char c){
+int shapeSum(const char c) {
     if (c == 'X') {
         return 1;
     }
@@ -67,35 +56,60 @@ int shapeSum(const char c){
     return 0;
 }
 
-//int myShapeSum(const std::vector<char> &myMoves) {
-//    return std::accumulate(myMoves.begin(), myMoves.end(), 0, [](int res, const char c) {
-//        if (c == 'X') {
-//            res += 1;
-//        }
-//        if (c == 'Y') {
-//            res += 2;
-//        }
-//        if (c == 'Z') {
-//            res += 3;
-//        }
-//        return res;
-//    });
-//}
+char myMove(const char opponent, const char order) {
+    std::vector<DuelPair> losingCombinations = {{'A', 'Z'},
+                                                {'B', 'X'},
+                                                {'C', 'Y'}};
+
+    std::vector<DuelPair> winningCombinations = {{'A', 'Y'}, // rock paper
+                                                 {'B', 'Z'}, // paper scissors
+                                                 {'C', 'X'}}; // scissors rock
+
+    std::vector<DuelPair> drawCombinations = {{'A', 'X'},
+                                              {'B', 'Y'},
+                                              {'C', 'Z'}};
+
+
+    if (order == 'Z') {
+        for (const auto &combination: winningCombinations) {
+            if (opponent == combination.opponent) {
+                return combination.me;
+            }
+        }
+    }
+
+    if (order == 'X') {
+        for (const auto &combination: losingCombinations) {
+            if (opponent == combination.opponent) {
+                return combination.me;
+            }
+        }
+    }
+
+    if (order == 'Y') {
+        for (const auto &combination: drawCombinations) {
+            if (opponent == combination.opponent) {
+                return combination.me;
+            }
+        }
+    }
+    return 0;
+}
 
 int main() {
 
     std::vector<char> opponentMoves;
+    std::vector<char> orders;
     std::vector<char> myMoves;
 
-    getInput(opponentMoves, myMoves);
+    getInput(opponentMoves, orders);
 
     int totalSum = 0;
 
-    for(int i = 0; i < myMoves.size(); i++){
+    for (int i = 0; i < orders.size(); i++) {
+        myMoves.push_back(myMove(opponentMoves[i], orders[i]));
         totalSum += pointsForDuel(opponentMoves[i], myMoves[i]);
         totalSum += shapeSum(myMoves[i]);
     }
-
     std::cout << totalSum;
 }
-
