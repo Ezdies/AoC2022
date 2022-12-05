@@ -23,7 +23,7 @@ void getInput(std::vector<Order> &vectorOfOrders) {
     }
 }
 
-void initializeStacks(std::vector<std::stack<char>> &vectorOfStacks) {
+std::vector<std::vector<char>> makeVectorOfVectors() {
     std::vector<char> vector1{'G', 'T', 'R', 'W'};
     std::vector<char> vector2{'G', 'C', 'H', 'P', 'M', 'S', 'V', 'W'};
     std::vector<char> vector3{'C', 'L', 'T', 'S', 'G', 'M'};
@@ -34,9 +34,22 @@ void initializeStacks(std::vector<std::stack<char>> &vectorOfStacks) {
     std::vector<char> vector8{'R', 'T', 'B'};
     std::vector<char> vector9{'H', 'N', 'W', 'L', 'C'};
 
+    return {vector1, vector2, vector3, vector4, vector5, vector6, vector7,
+            vector8, vector9};
+}
 
-    std::vector<std::vector<char>> vectorOfVectors{vector1, vector2, vector3, vector4, vector5, vector6, vector7,
-                                                   vector8, vector9};
+std::vector<std::stack<char>> makeVectorOfStacks() {
+    std::stack<char> stack1, stack2, stack3, stack4, stack5, stack6, stack7, stack8,
+            stack9;
+
+    return {stack1, stack2, stack3, stack4, stack5, stack6, stack7, stack8,
+            stack9};
+}
+
+
+void initializeStacks(std::vector<std::stack<char>> &vectorOfStacks) {
+
+    auto vectorOfVectors = makeVectorOfVectors();
 
     for (int i = 0; i < vectorOfStacks.size(); i++) {
         for (const char c: vectorOfVectors[i]) {
@@ -79,8 +92,8 @@ void printStacks(const std::vector<std::stack<char>> &vectorOfStacks) {
     std::cout << std::endl;
 }
 
-void printStackTops(const std::vector<std::stack<char>> &vectorOfStacks){
-    for(const auto &s : vectorOfStacks){
+void printStackTops(const std::vector<std::stack<char>> &vectorOfStacks) {
+    for (const auto &s: vectorOfStacks) {
         std::cout << s.top();
     }
 }
@@ -100,19 +113,9 @@ void printTmpStack(const std::vector<char> &tmpStack) {
 
 int main() {
 
-    std::stack<char> stack1;
-    std::stack<char> stack2;
-    std::stack<char> stack3;
-    std::stack<char> stack4;
-    std::stack<char> stack5;
-    std::stack<char> stack6;
-    std::stack<char> stack7;
-    std::stack<char> stack8;
-    std::stack<char> stack9;
     std::vector<char> takenElements;
 
-    std::vector<std::stack<char>> vectorOfStacks{stack1, stack2, stack3, stack4, stack5, stack6, stack7, stack8,
-                                                 stack9};
+    auto vectorOfStacks = makeVectorOfStacks();
 
     std::vector<Order> vectorOfOrders;
 
